@@ -1,0 +1,47 @@
+include <bits/stdc++.h>
+
+using namespace std;
+
+int main() {
+    // your code goes here
+    int arr[1];
+    for (int i = 0; i < 1; i++) {
+        cin >> arr[i];
+    }
+   if(arr[0]==11||22||33||44||55||66||77||88||99){
+       cout<<"no \n";
+       
+   }else {
+       cout<<"yes \n";
+   }
+}
+#include <bits/stdc++.h>
+
+using namespace std;
+
+int main() {
+    // your code goes here
+    int t, x, y, z;
+    cin >> t;
+    while (t--) {
+        cin >> x >> y >> z;
+        if (x * y >= z) {
+            cout << "0 \n";
+        } else {
+        
+            int count = 0;
+            while (x*y< z) {
+
+                if (x < y) {
+                    x++;
+                } else {
+                    y++;
+                };
+
+
+            }                count++;
+            cout<<count<<endl;
+        }
+
+    }
+}
