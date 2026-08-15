@@ -1,0 +1,21 @@
+{
+  "name": "cse-25",
+  "version": "1.0.0",
+
+  "description": "",
+  "homepage": "https://github.com/naitikrajput26-tech/fullstackdevcse25#readme",
+  "bugs": {
+    "url": "https://github.com/naitikrajput26-tech/fullstackdevcse25/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/naitikrajput26-tech/fullstackdevcse25.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
