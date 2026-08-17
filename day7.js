@@ -1,19 +1,5 @@
 // //  pro. 2 CRUD
-// import fs from "fs/promises"
-// const fileName="student.txt";
-// async function createFile(){
-//   try { 
-//  await fs.writeFile(
-//  fileName,
-//  "Name:naitik rajput\nEmail:abc@gmail.com,Btech,cse"
 
-//  )
-//   }
-//   catch{
-   
-//   }
-
-// }
 
 import fs from "fs/promises";
 
