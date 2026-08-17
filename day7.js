@@ -1,4 +1,4 @@
-// //Pogram  2 CRUD
+// //  pro. 2 CRUD
 // import fs from "fs/promises"
 // const fileName="student.txt";
 // async function createFile(){
@@ -14,10 +14,12 @@
 //   }
 
 // }
+
 import fs from "fs/promises";
 
 const fileName = "student.txt";
 
+// Create File
 async function createFile() {
   try {
     await fs.writeFile(
@@ -31,6 +33,18 @@ async function createFile() {
   }
 }
 
+// Read File
+async function readFile() {
+  try {
+    const data = await fs.readFile(fileName, "utf-8");
+
+    console.log("File Content:");
+    console.log(data);
+  } catch (error) {
+    console.log("Error:", error);
+  }
+}
+
 createFile().then(() => {
-  console.log("Function completed");
+  readFile();
 });
