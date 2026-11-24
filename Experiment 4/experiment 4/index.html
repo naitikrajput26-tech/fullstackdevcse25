@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Campus Help Desk</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            margin: 0;
+            padding: 30px;
+        }
+
+        .container {
+            width: 700px;
+            max-width: 95%;
+            margin: auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #1f2937;
+        }
+
+        .box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px #ddd;
+        }
+
+        h2 {
+            color: #374151;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0 15px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+
+        button {
+            padding: 9px 15px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            color: white;
+            margin-right: 6px;
+        }
+
+        .submit {
+            background: #2563eb;
+            width: 100%;
+        }
+
+        .update {
+            background: #f59e0b;
+        }
+
+        .delete {
+            background: #dc2626;
+        }
+
+        .request {
+            border-left: 5px solid #2563eb;
+            background: #f9fafb;
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 6px;
+        }
+
+        .request h3 {
+            margin-top: 0;
+        }
+
+        .priority {
+            font-weight: bold;
+        }
+
+        .empty {
+            text-align: center;
+            color: #777;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+    <h1>🎓 Campus Help Desk</h1>
+
+
+    <!-- Form -->
+
+    <div class="box">
+
+        <h2>Submit a Request</h2>
+
+        <form id="form">
+
+            <label>Student Name</label>
+
+            <input
+                type="text"
+                id="name"
+                placeholder="Enter your name"
+                required
+            >
+
+
+            <label>Email</label>
+
+            <input
+                type="email"
+                id="email"
+                placeholder="Enter your email"
+                required
+            >
+
+
+            <label>Category</label>
+
+            <select id="category">
+
+                <option>Hostel</option>
+                <option>Library</option>
+                <option>Academics</option>
+                <option>Cafeteria</option>
+                <option>IT / Wi-Fi</option>
+                <option>Other</option>
+
+            </select>
+
+
+            <label>Problem Description</label>
+
+            <input
+                type="text"
+                id="description"
+                placeholder="Describe your problem"
+                required
+            >
+
+
+            <label>Priority</label>
+
+            <select id="priority">
+
+                <option>Low</option>
+                <option selected>Medium</option>
+                <option>High</option>
+
+            </select>
+
+
+            <button class="submit" type="submit">
+                Submit Request
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- Requests -->
+
+    <div class="box">
+
+        <h2>All Requests</h2>
+
+        <div id="list"></div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+const form = document.getElementById("form");
+
+const list = document.getElementById("list");
+
+
+// GET
+async function getRequests() {
+
+    const response = await fetch("/api/requests");
+
+    const data = await response.json();
+
+    list.innerHTML = "";
+
+
+    if (data.length === 0) {
+
+        list.innerHTML =
+            `<p class="empty">No requests submitted yet.</p>`;
+
+        return;
+    }
+
+
+    data.forEach(request => {
+
+        list.innerHTML += `
+
+            <div class="request">
+
+                <h3>
+                    #${request.id} - ${request.category}
+                </h3>
+
+                <p>
+                    <b>Name:</b> ${request.name}
+                </p>
+
+                <p>
+                    <b>Email:</b> ${request.email}
+                </p>
+
+                <p>
+                    <b>Problem:</b> ${request.description}
+                </p>
+
+                <p class="priority">
+                    Priority: ${request.priority}
+                </p>
+
+
+                <button
+                    class="update"
+                    onclick="updateRequest(${request.id})">
+                    Update
+                </button>
+
+
+                <button
+                    class="delete"
+                    onclick="deleteRequest(${request.id})">
+                    Delete
+                </button>
+
+            </div>
+
+        `;
+
+    });
+
+}
+
+
+// POST
+form.addEventListener("submit", async function(e) {
+
+    e.preventDefault();
+
+
+    const request = {
+
+        name: document.getElementById("name").value,
+
+        email: document.getElementById("email").value,
+
+        category: document.getElementById("category").value,
+
+        description: document.getElementById("description").value,
+
+        priority: document.getElementById("priority").value
+
+    };
+
+
+    await fetch("/api/requests", {
+
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify(request)
+
+    });
+
+
+    form.reset();
+
+    getRequests();
+
+});
+
+
+// PUT
+async function updateRequest(id) {
+
+    const description =
+        prompt("Enter new problem description:");
+
+    if (!description) {
+        return;
+    }
+
+
+    await fetch(`/api/requests/${id}`, {
+
+        method: "PUT",
+
+        headers: {
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+            description: description
+        })
+
+    });
+
+
+    getRequests();
+
+}
+
+
+// DELETE
+async function deleteRequest(id) {
+
+    if (!confirm("Delete this request?")) {
+        return;
+    }
+
+
+    await fetch(`/api/requests/${id}`, {
+
+        method: "DELETE"
+
+    });
+
+
+    getRequests();
+
+}
+
+
+// Load requests
+getRequests();
+
+</script>
+
+</body>
+
+</html>
